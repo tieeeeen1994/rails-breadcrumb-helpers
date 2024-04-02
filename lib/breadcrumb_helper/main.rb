@@ -17,7 +17,7 @@ module BreadcrumbHelper
     # Render the items to view as a string and html_safe on.
     def render_breadcrumb_items
       try!("#{action_name}_breadcrumbs")
-      render("#{controller_namespace}/breadcrumb_items", items: breadcrumb_items)
+      render('breadcrumb_items', items: breadcrumb_items)
     end
 
     private
