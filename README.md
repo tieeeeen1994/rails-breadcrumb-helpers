@@ -68,6 +68,12 @@ With this setup, the controller's `index` and `show` actions will have their res
 
 Somewhere in your `layouts` (anywhere, really), simply call `render 'breadcrumbs'` to render them.
 
+## Gotchas
+
+This gem's Railtie sets the Rails application's `config.action_controller.include_all_helpers` to `false`. This is a non-negotiable setup as the way breadcrumbs are defined in each helper *will have unavoidably similar method names*.
+
+By default, Rails includes **all helper files** into a controller. This will result to some method names getting replaced when there are similar ones across all helpers. In order to avoid this, the mentioned config needs to be disabled so that **it only loads the related helper associated with the controller**.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/tieeeeen1994/breadcrumb_helper. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/tieeeeen1994/breadcrumb_helper/blob/master/CODE_OF_CONDUCT.md).
