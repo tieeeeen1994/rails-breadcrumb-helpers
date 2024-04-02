@@ -5,20 +5,13 @@
 class BreadcrumbsGenerator < Rails::Generators::Base
   source_root File.expand_path('templates', __dir__)
   desc 'Generates breadcrumb view templates based on given namespace.'
-  argument :name, type: :string, default: ''
+  argument :name, type: :string, required: true, desc: 'The namespace to generate the breadcrumb views.'
 
   def create_namespaced_breadcrumb_views
     return if processed_name.blank?
 
-    copy_file 'breadcrumb_items.html.erb', "app/views/layouts/#{processed_name}/_breadcrumb_items.html.erb"
-    copy_file 'breadcrumbs.html.erb', "app/views/layouts/#{processed_name}/_breadcrumbs.html.erb"
-  end
-
-  def create_shared_breadcrumb_views
-    return if processed_name.present?
-
-    copy_file 'breadcrumb_items.html.erb', 'app/views/shared/_breadcrumb_items.html.erb'
-    copy_file 'breadcrumbs.html.erb', 'app/views/shared/_breadcrumbs.html.erb'
+    copy_file 'breadcrumb_items.html.erb', "app/views/#{processed_name}/_breadcrumb_items.html.erb"
+    copy_file 'breadcrumbs.html.erb', "app/views/#{processed_name}/_breadcrumbs.html.erb"
   end
 
   def create_breadcrumb_concern
