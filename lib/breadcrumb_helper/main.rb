@@ -15,8 +15,9 @@ module BreadcrumbHelper
     end
 
     # Render the items to view as a string and html_safe on.
+    # Expected to find the partial in various locations thanks to Rails rendering.
     def render_breadcrumb_items
-      try!("#{action_name}_breadcrumbs")
+      try("#{action_name}_breadcrumbs")
       render('breadcrumb_items', items: breadcrumb_items)
     end
 
