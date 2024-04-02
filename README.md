@@ -1,34 +1,76 @@
-# BreadcrumbHelper
-
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/breadcrumb_helper`. To experiment with that code, run `bin/console` for an interactive prompt.
+# Breadcrumb Helper for Rails
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this to your Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```bash
+gem 'breadcrumb_helper', '~> 0.1'
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+### Generate the files
 
-## Development
+To start, use the provided generator for a simplified and streamlined workflow:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```bash
+rails generate breadcrumbs namespace
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+For example:
+
+```bash
+rails generate breadcrumbs test/namespace
+```
+will generate the following files in `test/namespace` folder structure respectively.
+1. `app/helpers/concerns/breadcrumb_helper/test/namespace.rb`
+2. `app/views/test/namespace/_breadcrumbs.html.erb`
+3. `app/views/test/namespace/_breadcrumb_items.html.erb`
+
+### Structuring the breadcrumbs
+
+The generator will provide a file inside `concerns` folder of `helpers`. This should be included (`include`) or prepended (`prepend`) to your helper files. Assume that we have a `Test::Namespace::SomeController` with `show` and `index` actions. There should exist a `Test::Namespace::SomeHelper` file that includes or prepends the `BreadcrumbHelper::Test::Namespace` module.
+
+```ruby
+module Test::Namespace
+  module SomeHelper
+    include BreadcrumbHelper::Test::Namespace
+    # or prepend BreadcrumbHelper::Test::Namespace
+
+    # ...
+  end
+end
+```
+
+Since `SomeController` have `show` and `index` actions, our helper can define breadcrumbs for each action as such:
+
+```ruby
+module Test::Namespace
+  module SomeHelper
+    include BreadcrumbHelper::Test::Namespace
+
+    def index_breadcrumbs
+      add_breadcrumb name: 'Home'
+    end
+
+    def show_breadcrumbs
+      add_breadcrumb name: 'Home', path: root_path
+      add_breadcrumb name: 'Specific Data'
+    end
+  end
+end
+```
+
+With this setup, the controller's `index` and `show` actions will have their respective breadcrumbs rendered as defined in your helper.
+
+### Render the breadcrumbs
+
+Somewhere in your `layouts` (anywhere, really), simply call `render 'breadcrumbs'` to render them.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/breadcrumb_helper. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/breadcrumb_helper/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/tieeeeen1994/breadcrumb_helper. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/tieeeeen1994/breadcrumb_helper/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -36,4 +78,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the BreadcrumbHelper project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/breadcrumb_helper/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the BreadcrumbHelper project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/tieeeeen1994/breadcrumb_helper/blob/master/CODE_OF_CONDUCT.md).
