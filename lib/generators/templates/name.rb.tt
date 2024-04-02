@@ -22,10 +22,7 @@ module BreadcrumbHelper
     private
 
     def add_root_breadcrumbs
-      <% split_paths = name.split('/') %>
-      <% split_paths.each_with_index do |segment, i| %>
-      add_breadcrumb name: <%= segment.titleize %>, path: "/<%= split_paths[0..i].join('/') %>"
-      <% end %>
+      <% split_paths = name.split('/') %><% split_paths.each_with_index do |segment, i| %>add_breadcrumb name: <%= segment.titleize %>, path: "/<%= split_paths[0..i].join('/') %>"<% end %>
     end
   end
 end
