@@ -2,7 +2,8 @@
 
 require_relative 'breadcrumb_helper/version'
 
-module BreadcrumbHelper
-  class Error < StandardError; end
-  # Your code goes here...
-end
+raise LoadError, 'The project is not a Rails project!' unless defined?(Rails)
+
+require_relative 'breadcrumb_helper/main'
+
+require_relative 'breadcrumb_helper/railtie'

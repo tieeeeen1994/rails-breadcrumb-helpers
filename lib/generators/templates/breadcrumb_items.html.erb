@@ -1,0 +1,11 @@
+<% items.each do |item| %>
+  <% if item[:path] %>
+    <li class="breadcrumb-item">
+      <a href="<%= item[:path] %>"><%= item[:name] %></a>
+    </li>
+  <% else %>
+    <li class="breadcrumb-item active" aria-current="page">
+      <%= item[:name] %>
+    </li>
+  <% end %>
+<% end %>
