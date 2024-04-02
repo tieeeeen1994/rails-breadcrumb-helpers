@@ -15,6 +15,8 @@ class BreadcrumbsGenerator < Rails::Generators::Base
   end
 
   def create_shared_breadcrumb_views
+    return if processed_name.present?
+
     copy_file 'breadcrumb_items.html.erb', 'app/views/shared/_breadcrumb_items.html.erb'
     copy_file 'breadcrumbs.html.erb', 'app/views/shared/_breadcrumbs.html.erb'
   end
