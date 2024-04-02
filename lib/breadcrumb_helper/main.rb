@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module BreadcrumbHelper
+  # Contains the core code driver for breadcrumbs.
   module Main
     # The method to add a breadcrumb item.
     # Add more methods to the helper to modify breadcrumb items.

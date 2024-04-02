@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'rails'
 require 'breadcrumb_helper'
 
 RSpec.configure do |config|

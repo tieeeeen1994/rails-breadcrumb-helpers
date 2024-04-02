@@ -7,9 +7,11 @@ module BreadcrumbHelper
       require_relative '../generators/breadcrumbs_generator'
     end
 
-    # Do not include helpers in controllers by default.
-    # This will still include helpers associated with the controller.
-    # E.g. Namespace::SomeController will still by default include Namespace::SomeHelper.
-    config.action_controller.include_all_helpers = false
+    initializer 'breadcrumb_helper.rails_application' do |app|
+      # Do not include helpers in controllers by default.
+      # This will still include helpers associated with the controller.
+      # E.g. Namespace::SomeController will still by default include Namespace::SomeHelper.
+      app.config.action_controller.include_all_helpers = false
+    end
   end
 end
