@@ -70,9 +70,32 @@ Somewhere in your `layouts` (anywhere, really), simply call `render 'breadcrumbs
 
 ## Gotchas
 
+### Railtie Configuration
+
 This gem's Railtie sets the Rails application's `config.action_controller.include_all_helpers` to `false`. This is a non-negotiable setup as the way breadcrumbs are defined in each helper *will have unavoidably similar method names*.
 
 By default, Rails includes **all helper files** into a controller. This will result to some method names getting replaced when there are similar ones across all helpers. In order to avoid this, the mentioned config needs to be disabled so that **it only loads the related helper associated with the controller**.
+
+### Crumb Stoppers
+
+As of `0.2.0`, this gem now supports a feature called Crumb Stoppers. Suppose we have the given code:
+
+```ruby
+module Some::Namespace
+  module MyHelper
+    prepend BreadcrumbHelper::Some::Namespace
+
+    def show_breadcrumbs
+      add_breadcrumb name: 'Home', path: root_path
+      add_breadcrumb name: @product.name # Assume this does not exist because of an unauthorized error that was rendered earlier.
+    end
+  end
+end
+```
+
+With Crumb Stoppers, the breadcrumb trails will still display Home, and will not raise an exception.
+
+Without Crumb Stoppers, the developer will need to add support for code *in each breadcrumb action*. To avoid this problem, the current default code of the gem is changed so that it stops the breadcrumb trail when it encounters a `NoMethodError` exception. Do note that it will still display the breadcrumbs that has no errors prior for a more beautiful display. However, the implementation is only integrated mostly in the view template, so for those who are updating the gem from `0.1.*`, I would advise to copy the code style found in the template to avail the Crumb Stoppers feature.
 
 ## Contributing
 

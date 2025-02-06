@@ -21,6 +21,23 @@ module BreadcrumbHelper
       render('breadcrumb_items', items: breadcrumb_items)
     end
 
+    # Tries to render the item name.
+    # This is a dynamic value, hence this method exists so that it can become the interface for displaying item names
+    # with the benefit of added guard clauses.
+    # It is recommended to use this in the view files.
+    def render_breadcrumb_item_name(item)
+      item[:name].to_s
+    rescue NoMethodError
+      nil
+    end
+
+    # Tries to render the item path.
+    # It does nothing special, but support for it is added just in case there are updates.
+    # It is still more recommended to use this in the view files.
+    def render_breadcrumb_item_path(item)
+      item[:path]
+    end
+
     private
 
     # Absolute source of truth for breadcrumb items, only modifiable through add_breadcrumb method.

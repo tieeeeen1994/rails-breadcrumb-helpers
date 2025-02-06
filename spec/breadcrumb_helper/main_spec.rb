@@ -47,4 +47,38 @@ RSpec.describe BreadcrumbHelper::Main do
       expect { instance._breadcrumb_items }.to raise_error(NoMethodError, /private method.*called/)
     end
   end
+
+  describe '#render_breadcrumb_item_path' do
+    let(:item) { { name: 'You Feel', path: '/like/dying' } }
+
+    it 'returns the path value of the item' do
+      expect(instance.render_breadcrumb_item_path(item)).to eq('/like/dying')
+    end
+  end
+
+  describe '#render_breadcrumb_item_name' do
+    context 'when the item name is valid' do
+      let(:item) { { name: 'I feel very terrible', path: '/my/dreams/feel/real' } }
+
+      it 'returns the name value of the item' do
+        expect(instance.render_breadcrumb_item_name(item)).to eq('I feel very terrible')
+      end
+    end
+
+    context 'when the item name is invalid' do
+      let(:item_klass) do
+        Class.new do
+          def to_s
+            raise NoMethodError
+          end
+        end
+      end
+      let(:item_klass_instance) { item_klass.new }
+      let(:item) { { name: item_klass_instance, path: '/my/dreams/feel/real' } }
+
+      it 'returns a falsey value' do
+        expect(instance.render_breadcrumb_item_name(item)).to be_falsey
+      end
+    end
+  end
 end
