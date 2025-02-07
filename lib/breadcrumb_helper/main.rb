@@ -20,7 +20,7 @@ module BreadcrumbHelper
       begin
         try("#{action_name}_breadcrumbs")
       rescue NoMethodError
-        Rails.logger.warn("An error occurred in #{action_name}_breadcrumbs in #{controller_namespace}.")
+        Rails.logger.warn("An error occurred in #{action_name}_breadcrumbs from #{controller_namespace}.")
       end
       render('breadcrumb_items', items: breadcrumb_items)
     end
