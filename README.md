@@ -95,7 +95,7 @@ end
 
 With Crumb Stoppers, the breadcrumb trails will still display Home, and will not raise an exception.
 
-Without Crumb Stoppers, the developer will need to add support for code *in each breadcrumb action*. To avoid this problem, the current default code of the gem is changed so that it stops the breadcrumb trail when it encounters a `NoMethodError` exception. Do note that it will still display the breadcrumbs that has no errors prior for a more beautiful display. However, the implementation is only integrated mostly in the view template, so for those who are updating the gem from `0.1.*`, I would advise to copy the code style found in the template to avail the Crumb Stoppers feature.
+Without Crumb Stoppers, the developer will need to add support for code *in each breadcrumb action*. To avoid this problem, the current default code of the gem is changed so that it stops the breadcrumb trail when it encounters a `NoMethodError` exception. Do note that it will still display the breadcrumbs that has no errors prior for a more beautiful display.
 
 ## Contributing
 
