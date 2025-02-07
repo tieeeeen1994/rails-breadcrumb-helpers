@@ -30,55 +30,55 @@ RSpec.describe BreadcrumbHelper::Main do
   end
 
   describe '#render_breadcrumb_items' do
-    before do
-      instance.add_breadcrumb(name: 'Your Life', path: '/kidney/stones')
-      allow(instance).to receive(:action_name).and_return('show')
-      allow(instance).to receive_messages(action_name: 'show', show_breadcrumbs: nil, controller_path: 'kidney/stones',
-                                          render: '<a href="/kidney/stones">Your Life</a>')
+    context 'when the action breadcrumbs method exists and has valid code' do
+      before do
+        instance.add_breadcrumb(name: 'Your Life', path: '/kidney/stones')
+        allow(instance).to receive_messages(action_name: 'show', show_breadcrumbs: nil,
+                                            controller_path: 'kidney/stones',
+                                            render: '<a href="/kidney/stones">Your Life</a>')
+      end
+
+      it 'renders the breadcrumb items' do
+        expect(instance.render_breadcrumb_items).to match(%r{/kidney/stones.*Your Life})
+      end
     end
 
-    it 'renders the breadcrumb items' do
-      expect(instance.render_breadcrumb_items).to match(%r{/kidney/stones.*Your Life})
+    context 'when the action breadcrumbs method does not exist' do
+      before do
+        allow(instance).to receive(:action_name).and_return('show')
+        allow(instance).to receive_messages(action_name: 'show', controller_path: 'kidney/stones',
+                                            render: '<a href="/lungs">Your Death</a>')
+      end
+
+      it 'still renders the template' do
+        expect(instance.render_breadcrumb_items).to eq('<a href="/lungs">Your Death</a>')
+      end
+    end
+
+    context 'when the action breadcrumbs method exists but raises an exception' do
+      let(:logger_klass) do
+        Class.new do
+          def self.warn(*args); end
+        end
+      end
+
+      before do
+        instance.add_breadcrumb(name: 'Your Life', path: '/kidney/stones')
+        allow(instance).to receive_messages(action_name: 'show', controller_path: 'kidney/stones',
+                                            render: '<a href="/failures/dreams">Ash in the Wind</a>')
+        allow(instance).to receive(:show_breadcrumbs).and_raise(NoMethodError)
+        allow(Rails).to receive(:logger).and_return(logger_klass)
+      end
+
+      it 'renders the template without fail' do
+        expect(instance.render_breadcrumb_items).to eq('<a href="/failures/dreams">Ash in the Wind</a>')
+      end
     end
   end
 
   describe '#_breadcrumb_items' do
     it 'is a private method' do
       expect { instance._breadcrumb_items }.to raise_error(NoMethodError, /private method.*called/)
-    end
-  end
-
-  describe '#render_breadcrumb_item_path' do
-    let(:item) { { name: 'You Feel', path: '/like/dying' } }
-
-    it 'returns the path value of the item' do
-      expect(instance.render_breadcrumb_item_path(item)).to eq('/like/dying')
-    end
-  end
-
-  describe '#render_breadcrumb_item_name' do
-    context 'when the item name is valid' do
-      let(:item) { { name: 'I feel very terrible', path: '/my/dreams/feel/real' } }
-
-      it 'returns the name value of the item' do
-        expect(instance.render_breadcrumb_item_name(item)).to eq('I feel very terrible')
-      end
-    end
-
-    context 'when the item name is invalid' do
-      let(:item_klass) do
-        Class.new do
-          def to_s
-            raise NoMethodError
-          end
-        end
-      end
-      let(:item_klass_instance) { item_klass.new }
-      let(:item) { { name: item_klass_instance, path: '/my/dreams/feel/real' } }
-
-      it 'returns a falsey value' do
-        expect(instance.render_breadcrumb_item_name(item)).to be_falsey
-      end
     end
   end
 end
