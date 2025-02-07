@@ -13,3 +13,5 @@
 
 .vscode
 *.gem
+
+.DS_Store
